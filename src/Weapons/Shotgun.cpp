@@ -34,7 +34,7 @@ bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
 
         float entityAngle = entity->getAngle();
 
-        int openAngle = 24;
+        int openAngle = 30;
         for (int i(0); i<12; ++i)
         {
             float angle = static_cast<float>(rand()%openAngle-openAngle/2);
