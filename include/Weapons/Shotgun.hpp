@@ -14,7 +14,7 @@ public:
 
     static void init();
 private:
-    // 在 Shotgun 類別中的 private 成員變數區域添加以下變數
+    // 在 Shotgun 類別中的 private 成員變數加以下變數
     static std::vector<size_t> m_shootSounds;
 };
 

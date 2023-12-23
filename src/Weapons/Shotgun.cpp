@@ -8,7 +8,7 @@ std::vector<size_t> Shotgun::m_shootSounds;
 
 Shotgun::Shotgun()
 {
-    m_fireCooldown = Cooldown(0.05f);
+    m_fireCooldown = Cooldown(1.0f);
     _recoil = 0.0f;
 
     _shootAnimation = Animation(3, 1, 312, 206, 3, 10);
@@ -55,7 +55,6 @@ bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
             world->addEntity(Fire::add(firePos, entityAngle+PIS2));
 
             SoundPlayer::playInstanceOf(m_shootSounds[getRandInt(0, 2)]);
-            std::cout << "Playing sound\n";  // 添加這行輸出語句
         }
 
         return true;
@@ -87,7 +86,4 @@ void Shotgun::init()
     m_shootSounds.push_back(SoundPlayer::registerSound("data/fire1.wav"));
     m_shootSounds.push_back(SoundPlayer::registerSound("data/fire2.wav"));
     m_shootSounds.push_back(SoundPlayer::registerSound("data/fire3.wav"));
-
-    // 檢查 `m_shootSounds` 大小
-    std::cout << "Number of sounds: " << m_shootSounds.size() << std::endl;
 }
