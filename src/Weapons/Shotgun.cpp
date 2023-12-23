@@ -2,6 +2,9 @@
 #include <System/GameRender.hpp>
 #include <System/GameWorld.hpp>
 #include "Props/Props.hpp"
+#include "System/Utils.hpp"
+
+std::vector<size_t> Shotgun::m_shootSounds;
 
 Shotgun::Shotgun()
 {
@@ -50,6 +53,9 @@ bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
 
             Vec2 firePos(newBullet->getCoord()+bulletVel*_fireDist);
             world->addEntity(Fire::add(firePos, entityAngle+PIS2));
+
+            SoundPlayer::playInstanceOf(m_shootSounds[getRandInt(0, 2)]);
+            std::cout << "Playing sound\n";  // 添加這行輸出語句
         }
 
         return true;
@@ -76,4 +82,12 @@ void Shotgun::init()
     _shootTextureID = GameRender::registerTexture("data/textures/hunter/hunter_shotgun_shoot.png");
     _moveTextureID  = GameRender::registerTexture("data/textures/hunter/hunter_shotgun_move.png");
     _idleTextureID  = GameRender::registerTexture("data/textures/hunter/hunter_shotgun_idle.png");
+
+    // 添加以下代碼以初始化射擊音效
+    m_shootSounds.push_back(SoundPlayer::registerSound("data/fire1.wav"));
+    m_shootSounds.push_back(SoundPlayer::registerSound("data/fire2.wav"));
+    m_shootSounds.push_back(SoundPlayer::registerSound("data/fire3.wav"));
+
+    // 檢查 `m_shootSounds` 大小
+    std::cout << "Number of sounds: " << m_shootSounds.size() << std::endl;
 }
