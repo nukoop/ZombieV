@@ -3,11 +3,17 @@
 #include <System/GameWorld.hpp>
 #include "Props/Props.hpp"
 #include "System/Utils.hpp"
+#include <iostream>
 
 std::vector<size_t> Shotgun::m_shootSounds;
 
 Shotgun::Shotgun()
 {
+    /*子彈*/
+    _magazineSize = 8;  //彈夾大小
+    _currentAmmo = _magazineSize;
+    _totalAmmo = 400000;  //總彈藥
+
     m_fireCooldown = Cooldown(1.0f);
     _recoil = 0.0f;
 
@@ -28,8 +34,10 @@ Shotgun::Shotgun()
 
 bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
 {
-    if (m_fireCooldown.isReady())
+    if (m_fireCooldown.isReady()&&_currentAmmo!=0)
     {
+        --_currentAmmo;  //減少目前彈藥
+        std::cout<<_currentAmmo<<std::endl;
         _recoil += 0.15f;
         _recoil = _recoil>1.0f?1.0f:_recoil;
 
@@ -53,7 +61,9 @@ bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
 
             Vec2 firePos(newBullet->getCoord()+bulletVel*_fireDist);
             world->addEntity(Fire::add(firePos, entityAngle+PIS2));
-
+            
+            /*--_currentAmmo;  //減少目前彈藥
+            std::cout<<_currentAmmo<<std::endl;*/
             SoundPlayer::playInstanceOf(m_shootSounds[getRandInt(0, 2)]);
         }
 
@@ -65,7 +75,11 @@ bool Shotgun::fire(GameWorld* world, WorldEntity* entity)
 
 void Shotgun::reload()
 {
+    size_t neededAmmo = _magazineSize - _currentAmmo;
+    size_t availableAmmo = std::min(_totalAmmo, neededAmmo);
 
+    _currentAmmo += availableAmmo;
+    _totalAmmo -= availableAmmo;
 }
 
 void Shotgun::update()
